@@ -1,7 +1,11 @@
-/** @type { import('@storybook/html').Preview } */
+import { withThemeByDataAttribute } from '@storybook/addon-styling';
+
+import '../stories/index.scss';
+
 const preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+    hideNoControlsWarning: true,
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -9,6 +13,16 @@ const preview = {
       },
     },
   },
+  decorators: [
+    withThemeByDataAttribute({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-bs-theme',
+    }),
+  ],
 };
 
 export default preview;

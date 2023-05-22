@@ -1,7 +1,13 @@
-/** @type { import('@storybook/html-vite').StorybookConfig } */
+const path = require('path');
+
 const config = {
-  stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions'],
+  stories: [
+    // Lookup wildcards should not meet a `node_modules` because due to `pnpm` symlinks everything break
+    // We scoped everything in folders like `stories` and `src` in each package
+    // Ref: https://github.com/storybookjs/storybook/issues/11181#issuecomment-1372243094
+    path.resolve(__dirname, '../../../apps/docs/stories/**/*.stories.@(js|ts|jsx|tsx|mdx)'),
+  ],
+  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-styling'],
   framework: {
     name: '@storybook/html-vite',
     options: {},
@@ -14,4 +20,5 @@ const config = {
     autodocs: 'tag',
   },
 };
+
 export default config;

@@ -1,6 +1,6 @@
 import { withThemeByDataAttribute } from '@storybook/addon-styling';
 
-import '../stories/index.scss';
+import '@dsfrc/dsfr-connect/src/bootstrap-v5/index.scss';
 
 const preview = {
   parameters: {

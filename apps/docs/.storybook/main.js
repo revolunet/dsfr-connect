@@ -1,4 +1,8 @@
 const path = require('path');
+const { mergeConfig } = require('vite');
+const viteTsconfig = require('vite-tsconfig-paths');
+
+const tsconfigPaths = viteTsconfig.default;
 
 const config = {
   stories: [
@@ -16,9 +20,25 @@ const config = {
     enableCrashReports: false,
     disableTelemetry: true,
   },
-  docs: {
-    autodocs: 'tag',
+  async viteFinal(config) {
+    return mergeConfig(config, {
+      resolve: {
+        alias: [
+          {
+            find: '@dsfrc/docs',
+            replacement: path.resolve(__dirname, '../../../apps/docs'),
+          },
+          {
+            find: '@dsfrc/dsfr-connect',
+            replacement: path.resolve(__dirname, '../../../packages/dsfr-connect'),
+          },
+        ],
+      },
+    });
   },
+  // docs: {
+  //   autodocs: 'tag',
+  // },
 };
 
 export default config;

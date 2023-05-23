@@ -4,10 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@mediature/docs/*": ["../../apps/docs/*"],
-      "@mediature/main/*": ["../../apps/main/*"],
-      "@mediature/ui/*": ["../../packages/ui/*"],
-      "@trpc/next-layout/*": ["../../packages/trpc-next-layout/*"]
+      "@dsfrc/docs/*": ["../../apps/docs/*"],
+      "@dsfrc/dsfr-connect/*": ["../../packages/dsfr-connect/*"]
     },
     "composite": false,
     "declaration": false,

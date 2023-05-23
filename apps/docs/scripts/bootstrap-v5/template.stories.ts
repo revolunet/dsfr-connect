@@ -1,5 +1,6 @@
 import { withThemeByDataAttribute } from '@storybook/addon-styling';
 import { Meta, StoryFn } from '@storybook/html';
+import bootstrapScript from 'bootstrap/dist/js/bootstrap.bundle.min.js?raw';
 
 import componentStyle from '@dsfrc/dsfr-connect/src/bootstrap-v5/index.scss?inline';
 
@@ -9,11 +10,14 @@ export default {
   title: '{{framework}}/{{component}}',
   decorators: [
     (story) => {
-      // Import the style here to not pollute other framework stories
+      // Import the style and script here to not pollute other framework stories
       const styleElement = document.createElement('style');
       styleElement.textContent = componentStyle;
 
-      return `${styleElement.outerHTML}${story()}`;
+      const scriptElement = document.createElement('script');
+      scriptElement.innerHTML = bootstrapScript;
+
+      return `${styleElement.outerHTML}${story()}${scriptElement.outerHTML}`;
     },
     withThemeByDataAttribute({
       themes: {

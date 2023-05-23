@@ -3,7 +3,13 @@ import { Meta, StoryFn } from '@storybook/html';
 export default {
   title: '{{framework}}/{{component}}',
   render: ({ label, ...args }) => {
-    return `{{{html}}}`;
+    return `{{#each codes}}
+    {{{this}}}
+
+    {{#unless @last}}
+        <br />
+    {{/unless}}
+{{/each}}`;
   },
 } as Meta<any>;
 

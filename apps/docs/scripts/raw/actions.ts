@@ -1,124 +1,61 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import fs from 'fs-extra';
+import { glob } from 'glob';
 import handlebars from 'handlebars';
 import { JSDOM } from 'jsdom';
 import path from 'path';
-import urlParse from 'url-parse';
+import urlToolkit from 'url-toolkit';
 
 const framework = 'raw';
 
+const mainPageUrl = new URL('https://main--ds-gouv.netlify.app/example/');
+const baseUrl = mainPageUrl.toString();
+const outputFolder = path.resolve(__dirname, `../../tmp/${framework}`);
+const visitedUrls = new Set();
+
 export async function downloadAndExtract() {
-  async function getPageHTML(url: string): Promise<string> {
-    const response = await axios.get(url);
-    return response.data;
-  }
-
-  async function extractLinksFromHTML(html: string, baseUrl: string): Promise<string[]> {
-    const dom = new JSDOM(html);
-    const links: string[] = [];
-
-    dom.window.document.querySelectorAll('a').forEach((element, index) => {
-      // Make sure to add the baseUrl if relative link
-      // const href = $(element).attr('href');
-      const href = element.getAttribute('href');
-      if (href) {
-        const parsedUrl = urlParse(href, baseUrl);
-
-        let absoluteUrl: string;
-        if (parsedUrl.protocol && parsedUrl.hostname) {
-          absoluteUrl = parsedUrl.toString();
-        } else {
-          absoluteUrl = urlParse(href, baseUrl).href;
-        }
-
-        links.push(absoluteUrl);
-      }
-    });
-
-    return links;
-  }
-
-  async function scrapeURLs(urls: string[]): Promise<string[]> {
-    for (const url of urls) {
-      const html = await getPageHTML(url);
-
-      const dom = new JSDOM(html);
-      dom.window.document.querySelectorAll('code.language-html').forEach((element, index) => {
-        console.log(element);
-      });
-    }
-
-    return [];
-  }
-
-  async function scrapeWebsite() {
-    const mainPageURL = new URL('https://www.systeme-de-design.gouv.fr/elements-d-interface');
-
-    // const mainPageHTML = await getPageHTML(mainPageURL.toString());
-    // const links = await extractLinksFromHTML(mainPageHTML, mainPageURL.origin);
-
-    // const filteredURLs = links.filter(
-    //   (link) =>
-    //     link.includes('/elements-d-interface/modeles/') ||
-    //     link.includes('/elements-d-interface/blocs-fonctionnels/') ||
-    //     link.includes('/elements-d-interface/composants/')
-    // );
-
-    // const htmlContents = await scrapeURLs(filteredURLs);
-    const htmlContents = await scrapeURLs([
-      'https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/lettre-d-information-et-reseaux-sociaux',
-    ]);
-  }
-
-  await scrapeWebsite();
-
-  // const zipDestination = path.resolve(__dirname, `../../tmp/${framework}.zip`);
-  // const extractionFolderPath = path.resolve(__dirname, `../../tmp/${framework}`);
-
-  // if (!(await fs.pathExists(zipDestination))) {
-  //   await downloadFile(zipUrl, zipDestination);
-  // }
-
-  // const zip = new AdmZip(zipDestination);
-  // zip.extractAllTo(extractionFolderPath, true);
+  // We do our own crawling because there is no good library to do recursive lookup simply
+  await startCrawling();
 }
 
 export async function build() {
-  const srcFolderPath = path.resolve(__dirname, `../../tmp/${framework}/bootstrap-5.3.0-alpha3/site/content/docs/5.3/examples`);
+  const entries = await glob(path.resolve(__dirname, `../../tmp/${framework}`) + '/**/*.html');
+  const folderToStripPath = path.resolve(__dirname, `../../tmp/${framework}/example`);
   const templateFilePath = path.resolve(__dirname, `./template.stories.ts`);
   const outputFolderPath = path.resolve(__dirname, `../../stories/frameworks/${framework}/`);
 
   try {
-    const entries = (await fs.readdir(srcFolderPath, { withFileTypes: true })).filter((entry) => !!entry);
-
     const storyTemplateContent = await fs.readFile(templateFilePath, 'utf-8');
     const storyTemplate = handlebars.compile(storyTemplateContent);
 
     await Promise.all(
       entries.map(async (entry) => {
-        // Components are in directory, use it as the name
-        if (entry.isDirectory()) {
-          const componentName = entry.name;
+        // Subtract the root and remove the extension
+        const storyName = path.relative(folderToStripPath, entry).replace(/\.[^/.]+$/, '');
 
-          const filePath = path.join(srcFolderPath, `${entry.name}/index.html`);
-          let componentHtml = await fs.readFile(filePath, 'utf-8');
+        let pageHtml = await fs.readFile(entry, 'utf-8');
 
-          // Remove meta content at the top that is visible when rendering the story and escape needed quotes for the template
-          componentHtml = componentHtml
-            .replace(/---[\s\S]*?---/, '')
-            .replace(/`/g, '\\`')
-            .replace(/\{\{[\s\S]*?\}\}/g, '') // Remove all templating pleceholders of the Bootstrap documentation
-            .trim();
-
-          // Format the story
-          const storyContent = storyTemplate({
-            framework: framework,
-            component: componentName,
-            html: componentHtml,
-          });
-
-          await fs.outputFile(path.join(outputFolderPath, componentName, 'index.stories.ts'), storyContent);
+        // Get all code sections
+        const dom = new JSDOM(pageHtml);
+        const codes = dom.window.document.querySelectorAll('code');
+        if (!codes.length) {
+          return;
         }
+
+        // Format the story
+        const storyContent = storyTemplate({
+          framework: framework,
+          component: storyName,
+          codes: Array.from(codes.values()).map((code) => {
+            console.log(111111);
+            console.log(code.innerHTML);
+            console.log();
+
+            return code.innerText;
+          }),
+        });
+
+        await fs.outputFile(path.join(outputFolderPath, storyName, 'index.stories.ts'), storyContent);
       })
     );
 
@@ -131,6 +68,79 @@ export async function build() {
 }
 
 export async function run() {
-  await downloadAndExtract();
-  // await build();
+  // await downloadAndExtract();
+  await build();
+}
+
+async function fetchPage(url: string): Promise<string | null> {
+  try {
+    const response = await axios.get(url);
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response?.status === 404) {
+      // Ignore
+    } else {
+      throw error;
+    }
+  }
+
+  return null;
+}
+
+async function savePage(url: string, content: string) {
+  const urlObject = new URL(url);
+
+  // Remove last "/" if any and encode name
+  const filePath = path.join(outputFolder, `${urlObject.pathname.replace(/\/$/, '')}.html`);
+  await fs.outputFile(filePath, content);
+}
+
+async function crawlPage(url: string) {
+  if (visitedUrls.has(url)) {
+    return;
+  }
+
+  visitedUrls.add(url);
+
+  try {
+    const html = await fetchPage(url);
+    if (!html) {
+      return;
+    }
+
+    await savePage(url, html);
+
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+
+    const links = document.querySelectorAll('a');
+    for (const link of links) {
+      const href = link.getAttribute('href');
+
+      if (href) {
+        let absoluteUrl = urlToolkit.buildAbsoluteURL(url, href);
+
+        // Prevent crawling same page due to different anchors
+        const urlObject = new URL(absoluteUrl);
+        urlObject.hash = '';
+
+        absoluteUrl = urlObject.toString();
+
+        // If not a subpage of the main one, ignore to save requests
+        if (!absoluteUrl.startsWith(mainPageUrl.toString())) {
+          continue;
+        }
+
+        crawlPage(absoluteUrl);
+      }
+    }
+  } catch (error) {
+    console.error(`Error has occured while crawling ${url}:`, error);
+    throw error;
+  }
+}
+
+async function startCrawling() {
+  await crawlPage(baseUrl);
 }

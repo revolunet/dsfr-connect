@@ -4,9 +4,13 @@ import '@dsfrc/dsfr-connect/src/bootstrap-v5/index.scss';
 
 const preview = {
   parameters: {
+    options: {
+      showPanel: false,
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
-    hideNoControlsWarning: true,
     controls: {
+      expanded: false,
+      hideNoControlsWarning: true,
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/,

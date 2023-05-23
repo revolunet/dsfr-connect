@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import fs from 'fs-extra';
 import { glob } from 'glob';
 import handlebars from 'handlebars';
+import he from 'he';
 import { JSDOM } from 'jsdom';
 import path from 'path';
 import urlToolkit from 'url-toolkit';
@@ -47,11 +48,8 @@ export async function build() {
           framework: framework,
           component: storyName,
           codes: Array.from(codes.values()).map((code) => {
-            console.log(111111);
-            console.log(code.innerHTML);
-            console.log();
-
-            return code.innerText;
+            // Since in `code` tags all entities were obviously encoded
+            return he.decode(code.innerHTML).replace(/`/g, '\\`').trim();
           }),
         });
 

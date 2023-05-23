@@ -52,6 +52,9 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.1
+      '@types/he':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@types/jsdom':
         specifier: ^21.1.1
         version: 21.1.1
@@ -73,6 +76,9 @@ importers:
       handlebars:
         specifier: ^4.7.7
         version: 4.7.7
+      he:
+        specifier: ^1.2.0
+        version: 1.2.0
       jsdom:
         specifier: ^22.0.0
         version: 22.0.0
@@ -2971,6 +2977,10 @@ packages:
       '@types/node': 20.2.3
     dev: true
 
+  /@types/he@1.2.0:
+    resolution: {integrity: sha512-uH2smqTN4uGReAiKedIVzoLUAXIYLBTbSofhx3hbNqj74Ua6KqFsLYszduTrLCMEAEAozF73DbGi/SC1bzQq4g==}
+    dev: true
+
   /@types/istanbul-lib-coverage@2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
     dev: true
@@ -4922,6 +4932,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /he@1.2.0:
+    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
+    hasBin: true
     dev: true
 
   /hosted-git-info@2.8.9:

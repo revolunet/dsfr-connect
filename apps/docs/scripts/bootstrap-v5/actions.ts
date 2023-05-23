@@ -1,14 +1,27 @@
+import AdmZip from 'adm-zip';
 import fs from 'fs-extra';
 import handlebars from 'handlebars';
 import path from 'path';
+import { downloadFile } from 'utils';
 
 const framework = 'bootstrap-v5';
+const zipUrl = 'https://github.com/twbs/bootstrap/archive/refs/tags/v5.3.0-alpha3.zip';
 
-// function download/build/run
+export async function downloadAndExtract() {
+  const zipDestination = path.resolve(__dirname, `../../tmp/${framework}.zip`);
+  const extractionFolderPath = path.resolve(__dirname, `../../tmp/${framework}`);
 
-async function main() {
-  const srcFolderPath = path.resolve(__dirname, '../../tmp/bootstrap-main/site/content/docs/5.3/examples');
-  const templateFilePath = path.resolve(__dirname, './template.stories.ts');
+  if (!(await fs.pathExists(zipDestination))) {
+    await downloadFile(zipUrl, zipDestination);
+  }
+
+  const zip = new AdmZip(zipDestination);
+  zip.extractAllTo(extractionFolderPath, true);
+}
+
+export async function build() {
+  const srcFolderPath = path.resolve(__dirname, `../../tmp/${framework}/bootstrap-5.3.0-alpha3/site/content/docs/5.3/examples`);
+  const templateFilePath = path.resolve(__dirname, `./template.stories.ts`);
   const outputFolderPath = path.resolve(__dirname, `../../stories/frameworks/${framework}/`);
 
   try {
@@ -48,7 +61,12 @@ async function main() {
     console.log('successful operation');
   } catch (error) {
     console.error('an error has occured:', error);
+
+    throw error;
   }
 }
 
-main();
+export async function run() {
+  await downloadAndExtract();
+  await build();
+}

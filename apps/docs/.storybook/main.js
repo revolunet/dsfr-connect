@@ -1,7 +1,9 @@
 const path = require('path');
 const { mergeConfig } = require('vite');
+const vitePluginRequire = require('vite-plugin-require');
 const viteTsconfig = require('vite-tsconfig-paths');
 
+const pluginRequire = vitePluginRequire.default;
 const tsconfigPaths = viteTsconfig.default;
 
 const config = {
@@ -22,6 +24,7 @@ const config = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
+      plugins: [pluginRequire()],
       resolve: {
         alias: [
           {

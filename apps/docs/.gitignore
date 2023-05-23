@@ -4,3 +4,6 @@
 
 # Folder for temporary UI framework archives
 /tmp
+
+# Compiled stories
+/stories/frameworks/

@@ -1,7 +1,7 @@
 export default {
   title: '{{framework}}/{{component}}',
   render: ({ label, ...args }) => {
-    return `{{html}}`;
+    return `{{{html}}}`;
   },
 };
 

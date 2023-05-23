@@ -42,7 +42,6 @@ export async function build() {
           // Remove meta content at the top that is visible when rendering the story and escape needed quotes for the template
           componentHtml = componentHtml
             .replace(/---[\s\S]*?---/, '')
-            .replace(/`/g, '\\`')
             .replace(/\{\{[\s\S]*?\}\}/g, '') // Remove all templating pleceholders of the Bootstrap documentation
             .trim();
 
@@ -50,9 +49,9 @@ export async function build() {
           const storyContent = storyTemplate({
             framework: framework,
             component: componentName,
-            html: componentHtml,
           });
 
+          await fs.outputFile(path.join(outputFolderPath, componentName, 'index.html'), componentHtml);
           await fs.outputFile(path.join(outputFolderPath, componentName, 'index.stories.ts'), storyContent);
         }
       })

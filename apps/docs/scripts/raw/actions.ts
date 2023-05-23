@@ -22,12 +22,15 @@ export async function downloadAndExtract() {
 export async function build() {
   const entries = await glob(path.resolve(__dirname, `../../tmp/${framework}`) + '/**/*.html');
   const folderToStripPath = path.resolve(__dirname, `../../tmp/${framework}/example`);
-  const templateFilePath = path.resolve(__dirname, `./template.stories.ts`);
+  const storyTemplateFilePath = path.resolve(__dirname, `./template.stories.ts`);
+  const htmlTemplateFilePath = path.resolve(__dirname, `./template.hbs`);
   const outputFolderPath = path.resolve(__dirname, `../../stories/frameworks/${framework}/`);
 
   try {
-    const storyTemplateContent = await fs.readFile(templateFilePath, 'utf-8');
+    const storyTemplateContent = await fs.readFile(storyTemplateFilePath, 'utf-8');
     const storyTemplate = handlebars.compile(storyTemplateContent);
+    const htmlTemplateContent = await fs.readFile(htmlTemplateFilePath, 'utf-8');
+    const htmlTemplate = handlebars.compile(htmlTemplateContent);
 
     await Promise.all(
       entries.map(async (entry) => {
@@ -47,12 +50,15 @@ export async function build() {
         const storyContent = storyTemplate({
           framework: framework,
           component: storyName,
+        });
+        const componentHtml = htmlTemplate({
           codes: Array.from(codes.values()).map((code) => {
             // Since in `code` tags all entities were obviously encoded
-            return he.decode(code.innerHTML).replace(/`/g, '\\`').trim();
+            return he.decode(code.innerHTML).trim();
           }),
         });
 
+        await fs.outputFile(path.join(outputFolderPath, storyName, 'index.html'), componentHtml);
         await fs.outputFile(path.join(outputFolderPath, storyName, 'index.stories.ts'), storyContent);
       })
     );

@@ -1,15 +1,11 @@
 import { Meta, StoryFn } from '@storybook/html';
 
+import componentHtml from './index.html?raw';
+
 export default {
   title: '{{framework}}/{{component}}',
   render: ({ label, ...args }) => {
-    return `{{#each codes}}
-    {{{this}}}
-
-    {{#unless @last}}
-        <br />
-    {{/unless}}
-{{/each}}`;
+    return componentHtml;
   },
 } as Meta<any>;
 

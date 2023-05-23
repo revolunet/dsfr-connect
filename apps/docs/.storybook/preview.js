@@ -1,5 +1,3 @@
-import { withThemeByDataAttribute } from '@storybook/addon-styling';
-
 const preview = {
   parameters: {
     options: {
@@ -9,16 +7,7 @@ const preview = {
       hideNoControlsWarning: true,
     },
   },
-  decorators: [
-    withThemeByDataAttribute({
-      themes: {
-        light: 'light',
-        dark: 'dark',
-      },
-      defaultTheme: 'light',
-      attributeName: 'data-bs-theme',
-    }),
-  ],
+  decorators: [],
 };
 
 export default preview;

@@ -2,9 +2,8 @@ name: Continuous Integration
 on:
   push:
     branches:
-      []
-      # - main
-      # - dev
+      - main
+      - dev
 env:
   APP_NAME: mediature
   CONTAINER_REGISTRY: ghcr.io

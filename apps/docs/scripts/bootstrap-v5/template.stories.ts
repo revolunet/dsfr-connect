@@ -1,3 +1,4 @@
+import { withThemeByDataAttribute } from '@storybook/addon-styling';
 import { Meta, StoryFn } from '@storybook/html';
 
 import componentStyle from '@dsfrc/dsfr-connect/src/bootstrap-v5/index.scss?inline';
@@ -14,6 +15,14 @@ export default {
 
       return `${styleElement.outerHTML}${story()}`;
     },
+    withThemeByDataAttribute({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-bs-theme',
+    }),
   ],
   render: ({ label, ...args }) => {
     return componentHtml;

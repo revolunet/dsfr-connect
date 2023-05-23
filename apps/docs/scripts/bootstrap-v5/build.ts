@@ -8,7 +8,7 @@ const framework = 'bootstrap-v5';
 
 async function main() {
   const srcFolderPath = path.resolve(__dirname, '../../tmp/bootstrap-main/site/content/docs/5.3/examples');
-  const templateFilePath = path.resolve(__dirname, './template.stories.js');
+  const templateFilePath = path.resolve(__dirname, './template.stories.ts');
   const outputFolderPath = path.resolve(__dirname, `../../stories/frameworks/${framework}/`);
 
   try {
@@ -40,7 +40,7 @@ async function main() {
             html: componentHtml,
           });
 
-          await fs.outputFile(path.join(outputFolderPath, componentName, 'index.stories.js'), storyContent);
+          await fs.outputFile(path.join(outputFolderPath, componentName, 'index.stories.ts'), storyContent);
         }
       })
     );

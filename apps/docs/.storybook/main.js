@@ -13,7 +13,17 @@ const config = {
     // Ref: https://github.com/storybookjs/storybook/issues/11181#issuecomment-1372243094
     path.resolve(__dirname, '../../../apps/docs/stories/**/*.stories.@(js|ts|jsx|tsx|mdx)'),
   ],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-styling'],
+  addons: [
+    '@storybook/addon-links',
+    {
+      name: '@storybook/addon-essentials',
+      options: {
+        actions: false,
+        controls: false,
+      },
+    },
+    '@storybook/addon-styling',
+  ],
   framework: {
     name: '@storybook/html-vite',
     options: {},
@@ -39,9 +49,6 @@ const config = {
       },
     });
   },
-  // docs: {
-  //   autodocs: 'tag',
-  // },
 };
 
 export default config;

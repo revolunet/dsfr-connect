@@ -1,3 +1,7 @@
 import { addons } from '@storybook/addons';
 
-addons.setConfig({});
+addons.setConfig({
+  sidebar: {
+    showRoots: true,
+  },
+});

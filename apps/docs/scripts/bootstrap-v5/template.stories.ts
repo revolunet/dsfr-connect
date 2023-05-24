@@ -7,7 +7,7 @@ import componentStyle from '@dsfrc/dsfr-connect/src/bootstrap-v5/index.scss?inli
 import componentHtml from './index.html?raw';
 
 export default {
-  title: '{{framework}}/{{component}}',
+  title: 'gallery/{{framework}}/{{component}}',
   decorators: [
     (story) => {
       // Import the style and script here to not pollute other framework stories

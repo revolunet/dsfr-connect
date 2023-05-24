@@ -9,7 +9,7 @@ import { withDsfrTheme } from '@dsfrc/docs/utils/decorators';
 import componentHtml from './index.html?raw';
 
 export default {
-  title: '{{framework}}/{{component}}',
+  title: 'gallery/{{framework}}/{{component}}',
   decorators: [
     (story) => {
       // Import the style and script here to not pollute other framework stories

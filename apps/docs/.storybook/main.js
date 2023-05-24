@@ -2,6 +2,7 @@ const path = require('path');
 const { mergeConfig } = require('vite');
 const vitePluginRequire = require('vite-plugin-require');
 const viteTsconfig = require('vite-tsconfig-paths');
+// const vue = require('@vitejs/plugin-vue');
 
 const pluginRequire = vitePluginRequire.default;
 const tsconfigPaths = viteTsconfig.default;
@@ -13,6 +14,7 @@ const config = {
     // Ref: https://github.com/storybookjs/storybook/issues/11181#issuecomment-1372243094
     path.resolve(__dirname, '../../../apps/docs/stories/**/*.stories.@(js|ts|jsx|tsx|mdx)'),
   ],
+  staticDirs: ['../public'],
   addons: [
     '@storybook/addon-links',
     {
@@ -32,6 +34,9 @@ const config = {
     },
     '@storybook/addon-styling',
   ],
+  features: {
+    buildStoriesJson: true,
+  },
   framework: {
     name: '@storybook/html-vite',
     options: {},
@@ -42,7 +47,19 @@ const config = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [pluginRequire()],
+      plugins: [
+        pluginRequire(),
+        // vue({
+        //   template: {
+        //     compilerOptions: {
+        //       // ...
+        //     },
+        //     transformAssetUrls: {
+        //       // ...
+        //     },
+        //   },
+        // }),
+      ],
       resolve: {
         alias: [
           {

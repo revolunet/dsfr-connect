@@ -28,6 +28,11 @@ export default {
       attributeName: 'data-bs-theme',
     }),
   ],
+  parameters: {
+    storySource: {
+      source: componentHtml,
+    },
+  },
   render: ({ label, ...args }) => {
     return componentHtml;
   },

@@ -30,6 +30,11 @@ export default {
       attributeName: 'data-fr-theme',
     }),
   ],
+  parameters: {
+    storySource: {
+      source: componentHtml,
+    },
+  },
   render: ({ label, ...args }) => {
     return componentHtml;
   },

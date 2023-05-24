@@ -22,6 +22,14 @@ const config = {
         controls: false,
       },
     },
+    {
+      name: '@storybook/addon-storysource',
+      options: {
+        loaderOptions: {
+          prettierConfig: { singleQuote: true },
+        },
+      },
+    },
     '@storybook/addon-styling',
   ],
   framework: {

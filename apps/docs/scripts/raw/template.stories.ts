@@ -1,8 +1,10 @@
 import dsfrStyle from '@gouvfr/dsfr/dist/dsfr/dsfr.min.css?inline';
-import dsfrScript from '@gouvfr/dsfr/dist/dsfr/dsfr.nomodule.min.js?raw';
+import moduleDsfrScript from '@gouvfr/dsfr/dist/dsfr/dsfr.module.min.js?raw';
+import noModuleDsfrScript from '@gouvfr/dsfr/dist/dsfr/dsfr.nomodule.min.js?raw';
 import dsfrUtilityStyle from '@gouvfr/dsfr/dist/utility/utility.min.css?inline';
-import { withThemeByDataAttribute } from '@storybook/addon-styling';
 import { Meta, StoryFn } from '@storybook/html';
+
+import { withDsfrTheme } from '@dsfrc/docs/utils/decorators';
 
 import componentHtml from './index.html?raw';
 
@@ -16,18 +18,25 @@ export default {
       const utilityStyleElement = document.createElement('style');
       utilityStyleElement.textContent = dsfrUtilityStyle;
 
-      const scriptElement = document.createElement('script');
-      scriptElement.innerHTML = dsfrScript;
+      const moduleScriptElement = document.createElement('script');
+      moduleScriptElement.type = 'module';
+      moduleScriptElement.async = false;
+      moduleScriptElement.innerHTML = moduleDsfrScript;
+      const noModuleScriptElement = document.createElement('script');
+      noModuleScriptElement.noModule = true;
+      noModuleScriptElement.async = false;
+      // Disabling for now since having it results in the following error (note it does not happen if imported globally and injectd inline):
+      // "[object Undefined]is not a function."
+      // noModuleScriptElement.innerHTML = noModuleDsfrScript;
 
-      return `${styleElement.outerHTML}${utilityStyleElement.outerHTML}${story()}${scriptElement.outerHTML}`;
+      return `${styleElement.outerHTML}${utilityStyleElement.outerHTML}${story()}${moduleScriptElement.outerHTML}${noModuleScriptElement.outerHTML}`;
     },
-    withThemeByDataAttribute({
+    withDsfrTheme({
       themes: {
         light: 'light',
         dark: 'dark',
       },
       defaultTheme: 'light',
-      attributeName: 'data-fr-theme',
     }),
   ],
   parameters: {

@@ -13,9 +13,9 @@ export function getConfig(framework?: string): StorybookConfig {
 
   // Stories from other storybooks will be listed thanks to references if launched
   if (framework) {
-    stories.push(path.resolve(__dirname, `../../../../../apps/docs/stories/frameworks/${framework}/**/*.stories.@(js|ts|jsx|tsx|mdx)`));
+    stories.push(path.resolve(__dirname, `../../../../apps/docs/stories/frameworks/${framework}/**/*.stories.@(js|ts|jsx|tsx|mdx)`));
   } else {
-    stories.push(path.resolve(__dirname, `../../../../../apps/docs/stories/frameworks/raw/**/*.stories.@(js|ts|jsx|tsx|mdx)`));
+    stories.push(path.resolve(__dirname, `../../../../apps/docs/stories/frameworks/raw/**/*.stories.@(js|ts|jsx|tsx|mdx)`));
   }
 
   return {
@@ -31,12 +31,12 @@ export function getConfig(framework?: string): StorybookConfig {
     },
   };
 }
-const framework: string = path.basename(__dirname);
 
-const commonConfig = getConfig(framework);
+const commonConfig = getConfig();
 
 const config: StorybookConfig = {
   ...commonConfig,
+
   framework: {
     ...((commonConfig.framework as object) || {}),
     name: '@storybook/html-vite',
@@ -46,6 +46,15 @@ const config: StorybookConfig = {
     ...(commonConfig.core || {}),
     builder: '@storybook/builder-vite',
   },
+  refs: (config, options) => {
+    return {
+      react: {
+        title: 'Test',
+        url: 'http://localhost:6006/frameworks/bootstrap-v5',
+      },
+    };
+  },
+
   viteFinal: (function viteFinalFactory(framework?: string) {
     return async (config: InlineConfig, options: Options) => {
       return mergeConfig(config, {
@@ -65,7 +74,7 @@ const config: StorybookConfig = {
         },
       });
     };
-  })(framework),
+  })(),
 };
 
 export default config;

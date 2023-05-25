@@ -42,7 +42,7 @@ program
         commands = [
           {
             target: mainTarget,
-            command: `storybook dev -p ${mainTarget.port} --no-open`,
+            command: `storybook dev -p ${mainTarget.port} -c .storybook/main --no-open`,
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
@@ -54,7 +54,7 @@ program
         commands = [
           {
             target: mainTarget,
-            command: 'storybook build --output-dir dist',
+            command: 'storybook build -c .storybook/main --output-dir dist',
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
@@ -66,7 +66,7 @@ program
         commands = [
           {
             target: mainTarget,
-            command: `serve -l ${mainTarget.port}`,
+            command: `serve -l ${mainTarget.port} dist/`,
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,

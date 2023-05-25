@@ -20,23 +20,9 @@ export function getConfig(framework?: string): StorybookConfig {
   return {
     stories: stories,
     addons: [
-      '@storybook/addon-links',
       {
         name: '@storybook/addon-essentials',
-        options: {
-          actions: false,
-          controls: false,
-        },
       },
-      {
-        name: '@storybook/addon-storysource',
-        options: {
-          loaderOptions: {
-            prettierConfig: { singleQuote: true },
-          },
-        },
-      },
-      '@storybook/addon-styling',
     ],
     core: {
       enableCrashReports: false,

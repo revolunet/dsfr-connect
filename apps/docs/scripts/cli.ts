@@ -1,6 +1,8 @@
 import { Option, program } from 'commander';
 import concurrently from 'concurrently';
+import path from 'path';
 
+import { getFrameworkFolderPath } from '@dsfrc/docs/utils';
 import { Target, frameworks, mainTarget } from '@dsfrc/docs/utils/targets';
 
 interface CommandOptions {
@@ -36,17 +38,19 @@ program
       selectedFrameworks = frameworks;
     }
 
+    const mainFolderPath = path.resolve(__dirname, '../');
+
     let commands: TargetCommand[] | undefined;
     switch (action) {
       case 'dev':
         commands = [
           {
             target: mainTarget,
-            command: `storybook dev -p ${mainTarget.port} --no-open`,
+            command: `storybook dev -p ${mainTarget.port} -c ${mainFolderPath}/.storybook --no-open`,
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
-            command: `storybook dev -p ${framework.port} -c .storybook/frameworks/${framework.name} --no-open`,
+            command: `storybook dev -p ${framework.port} -c ${getFrameworkFolderPath(mainFolderPath, framework.name)}/.storybook --no-open`,
           })),
         ];
         break;
@@ -54,11 +58,14 @@ program
         commands = [
           {
             target: mainTarget,
-            command: 'storybook build --output-dir dist',
+            command: `storybook build -c ${mainFolderPath}/.storybook --output-dir ${mainFolderPath}/dist`,
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
-            command: `storybook build -c .storybook/frameworks/${framework.name} --output-dir dist/frameworks/${framework.name}`,
+            command: `storybook build -c ${getFrameworkFolderPath(
+              mainFolderPath,
+              framework.name
+            )}/.storybook --output-dir ${mainFolderPath}/dist/frameworks/${framework.name}`,
           })),
         ];
         break;
@@ -66,11 +73,11 @@ program
         commands = [
           {
             target: mainTarget,
-            command: `serve -l ${mainTarget.port}`,
+            command: `serve -l ${mainTarget.port} ${mainFolderPath}/dist`,
           },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
-            command: `serve -l ${framework.port} dist/frameworks/${framework.name}`,
+            command: `serve -l ${framework.port} ${mainFolderPath}/dist/frameworks/${framework.name}`,
           })),
         ];
         break;

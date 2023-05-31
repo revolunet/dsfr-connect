@@ -2,7 +2,7 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build:prepare": {
-      "outputs": []
+      "cache": false
     },
     "build": {
       "dependsOn": ["^build"],
@@ -17,10 +17,10 @@
       "dependsOn": []
     },
     "lint": {
-      "outputs": []
+      "cache": false
     },
     "dev:prepare": {
-      "outputs": []
+      "cache": false
     },
     "dev": {
       "cache": false

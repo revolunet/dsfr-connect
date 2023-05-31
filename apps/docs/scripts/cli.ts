@@ -16,7 +16,7 @@ interface TargetCommand {
   env?: Record<string, unknown>;
 }
 
-const actions = ['dev', 'build', 'start', 'prepare', 'download', 'extract', 'lint', 'lint:es', 'lint:ts', 'test:unit', 'test:unit:watch'];
+const actions = ['dev', 'build', 'start', 'prepare', 'download', 'extract', 'lint', 'lint:es', 'lint:ts'];
 
 const lintEsCommand = 'TIMING=1 pnpm eslint --ext .js,.jsx,.ts,.tsx,.mdx .';
 const lintTsCommand = 'pnpm tsc --noEmit --incremental false';

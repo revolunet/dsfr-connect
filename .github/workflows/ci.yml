@@ -64,10 +64,10 @@ jobs:
         run: make test-unit
 
       - name: Prepare building
-        run: make build-prepare
+        run: make build-prepare && ls apps/docs/stories/framework
 
       - name: Build
-        run: make build
+        run: make build && cat apps/docs/dist/main/stories.json
 
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master

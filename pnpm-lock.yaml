@@ -265,6 +265,9 @@ importers:
       '@dsfrc/dsfr-connect':
         specifier: workspace:dsfr-connect@*
         version: link:../../packages/dsfr-connect
+      '@mdi/font':
+        specifier: ^7.2.96
+        version: 7.2.96
       '@mdi/js':
         specifier: ^7.2.96
         version: 7.2.96
@@ -2494,6 +2497,10 @@ packages:
 
   /@juggle/resize-observer@3.4.0:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
+    dev: true
+
+  /@mdi/font@7.2.96:
+    resolution: {integrity: sha512-e//lmkmpFUMZKhmCY9zdjRe4zNXfbOIJnn6xveHbaV2kSw5aJ5dLXUxcRt1Gxfi7ZYpFLUWlkG2MGSFAiqAu7w==}
     dev: true
 
   /@mdi/js@7.2.96:

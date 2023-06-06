@@ -80,10 +80,19 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
       css: {
         preprocessorOptions: {
           scss: {
-            additionalData: `@import "${path.resolve(
-              __dirname,
-              `../../../../apps/docs/utils/storybook/variables.${options.configType === 'PRODUCTION' ? 'prod' : 'dev'}.scss`
-            )}";`,
+            additionalData: (content: string) => {
+              // Only add the variables to the font file for now
+              // Setting it on all would break those using `@use` since no definition must be done before
+              let preprendContent = '';
+              if (content.includes('$fontBaseUrl: ')) {
+                preprendContent = `@import "${path.resolve(
+                  __dirname,
+                  `../../../../apps/docs/utils/storybook/variables.${options.configType === 'PRODUCTION' ? 'prod' : 'dev'}.scss`
+                )}";`;
+              }
+
+              return `${preprendContent}\n${content}`;
+            },
           },
         },
       },

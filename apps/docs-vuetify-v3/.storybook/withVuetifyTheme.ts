@@ -1,7 +1,7 @@
 import { DecoratorHelpers } from '@storybook/addon-styling';
 import type { DecoratorFunction, Renderer } from '@storybook/types';
+import { h } from 'vue';
 
-// import { h } from 'vue';
 import StoryWrapper from './StoryWrapper.vue';
 
 const { initializeThemeState, pluckThemeFromContext, useThemeParameters } = DecoratorHelpers;
@@ -44,8 +44,8 @@ export const withVuetifyTheme = <TRenderer extends Renderer = Renderer>({
     // at <VApp theme="light" >
     // at <StoryWrapper themeName="light" key="light" >
     // at <App>
-    // return h(
     // ---
+    // return h(
     //   StoryWrapper as any,
     //   { themeName: selected, key: selected },
     //   {

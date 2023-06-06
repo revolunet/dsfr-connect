@@ -15,7 +15,6 @@ export function getConfig(framework?: string): StorybookConfig {
 
   // Stories from other storybooks will be listed thanks to references if launched
   if (framework) {
-    stories.push(path.resolve(__dirname, `../../../../apps/docs-${framework}/stories/**/*.@(mdx)`));
     stories.push(path.resolve(__dirname, `../../../../apps/docs-${framework}/stories/**/*.stories.@(js|ts|jsx|tsx|mdx)`));
   } else {
     stories.push(path.resolve(__dirname, `../../../../apps/docs/stories/**/*.@(mdx)`));
@@ -67,7 +66,15 @@ export function getConfig(framework?: string): StorybookConfig {
   };
 }
 
-export function viteFinalFactory(framework?: string) {
+export interface ViteFinalFactoryOptions {
+  framework?: string;
+  alias?: {
+    find: string;
+    replacement: string;
+  }[];
+}
+
+export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
   return async (config: InlineConfig, options: Options) => {
     return mergeConfig(config, {
       css: {
@@ -94,11 +101,11 @@ export function viteFinalFactory(framework?: string) {
       ],
       resolve: {
         alias: [
-          ...(framework
+          ...(factoryOptions?.framework
             ? [
                 {
-                  find: `@dsfrc/docs-${framework}`,
-                  replacement: path.resolve(__dirname, `../../../../apps/docs-${framework}`),
+                  find: `@dsfrc/docs-${factoryOptions.framework}`,
+                  replacement: path.resolve(__dirname, `../../../../apps/docs-${factoryOptions.framework}`),
                 },
               ]
             : []),
@@ -116,6 +123,7 @@ export function viteFinalFactory(framework?: string) {
             find: 'module',
             replacement: path.resolve(__dirname, '../../../../packages/dsfr-connect/node_modules/@gouvfr/dsfr/module'),
           },
+          ...(factoryOptions?.alias ? factoryOptions?.alias : []),
         ],
       },
     });

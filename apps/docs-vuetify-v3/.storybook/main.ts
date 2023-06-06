@@ -1,9 +1,10 @@
-import { StorybookConfig } from '@storybook/html-vite';
+import { StorybookConfig } from '@storybook/vue3-vite';
+import path from 'path';
 
 import { getConfig, viteFinalFactory } from '@dsfrc/docs/utils/storybook/main';
 import { TargetName } from '@dsfrc/docs/utils/targets';
 
-const framework: TargetName = 'bootstrap-v5';
+const framework: TargetName = 'vuetify-v3';
 
 const commonConfig = getConfig(framework);
 
@@ -11,7 +12,7 @@ const config: StorybookConfig = {
   ...commonConfig,
   framework: {
     ...((commonConfig.framework as object) || {}),
-    name: '@storybook/html-vite',
+    name: '@storybook/vue3-vite',
     options: {},
   },
   core: {
@@ -20,6 +21,12 @@ const config: StorybookConfig = {
   },
   viteFinal: viteFinalFactory({
     framework: framework,
+    alias: [
+      {
+        find: '@/util',
+        replacement: path.resolve(__dirname, '../stories/framework/util'),
+      },
+    ],
   }),
 };
 

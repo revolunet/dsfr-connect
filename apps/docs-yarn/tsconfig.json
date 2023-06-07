@@ -1,0 +1,12 @@
+{
+  "extends": "../../apps/docs/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/util/*": ["stories/framework/util/*"]
+    },
+    "module": "esnext",
+    "types": ["vite/client"]
+  },
+  "include": [".storybook/**/*.ts", ".storybook/**/*.tsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

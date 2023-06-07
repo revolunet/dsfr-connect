@@ -94,7 +94,7 @@ $font-family: 'Marianne', arial, sans-serif;
       'line-height': 2.25rem,
       'letter-spacing': 0.0892857143em,
       'font-family': $font-family,
-      'text-transform': none,
+      'text-transform': none !important,
     ),
     'caption': (
       'size': 0.75rem,
@@ -102,7 +102,7 @@ $font-family: 'Marianne', arial, sans-serif;
       'line-height': 1.25rem,
       'letter-spacing': 0.0333333333em,
       'font-family': $font-family,
-      'text-transform': none,
+      'text-transform': none !important,
     ),
     'overline': (
       'size': 0.75rem,
@@ -110,7 +110,7 @@ $font-family: 'Marianne', arial, sans-serif;
       'line-height': 2rem,
       'letter-spacing': 0.1666666667em,
       'font-family': $font-family,
-      'text-transform': none,
+      'text-transform': none !important,
     ),
   ),
 

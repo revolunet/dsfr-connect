@@ -5,6 +5,8 @@ import { InlineConfig, mergeConfig } from 'vite';
 import { normalizePath } from 'vite';
 import pluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
+import vuetify from 'vite-plugin-vuetify';
 
 export function getConfig(framework?: string): StorybookConfig {
   const stories: string[] = [
@@ -76,6 +78,9 @@ export interface ViteFinalFactoryOptions {
 
 export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
   return async (config: InlineConfig, options: Options) => {
+    // console.log(config.plugins);
+    // throw 1111;
+
     return mergeConfig(config, {
       css: {
         preprocessorOptions: {
@@ -106,6 +111,10 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
               dest: 'assets/fonts', // Must be relative
             },
           ],
+        }),
+        vuetify({
+          autoImport: true,
+          styles: { configFile: path.resolve(__dirname, `./settings.scss`) },
         }),
       ],
       resolve: {

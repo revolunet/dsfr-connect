@@ -25,12 +25,12 @@ const config: StorybookConfig = {
     configToMerge: (options) => {
       return {
         optimizeDeps: {
-          exclude: options.configType !== 'PRODUCTION' ? ['@storybook/addon-styling', 'vuetify', '@codegouvfr/react-dsfr'] : [], // Avoid optimizing those librairies since directly imported (otherwise it takes more time and requires sometimes reloading the page)
+          exclude: options.configType !== 'PRODUCTION' ? ['@storybook/addon-styling', 'vuetify'] : [], // Avoid optimizing those librairies since directly imported (otherwise it takes more time and requires sometimes reloading the page)
         },
         plugins: [
           vuetify({
             autoImport: true,
-            styles: { configFile: path.resolve(__dirname, `./settings.scss`) },
+            styles: { configFile: path.resolve(__dirname, `../../../packages/dsfr-connect/src/vuetify-v3/settings.scss`) },
           }),
         ],
         resolve: {

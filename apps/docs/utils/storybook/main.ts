@@ -5,7 +5,6 @@ import { InlineConfig, mergeConfig } from 'vite';
 import { normalizePath } from 'vite';
 import pluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import vuetify from 'vite-plugin-vuetify';
 
 export function getConfig(framework?: string): StorybookConfig {
   const stories: string[] = [
@@ -69,15 +68,12 @@ export function getConfig(framework?: string): StorybookConfig {
 
 export interface ViteFinalFactoryOptions {
   framework?: string;
-  alias?: {
-    find: string;
-    replacement: string;
-  }[];
+  configToMerge?: (options: Options) => InlineConfig;
 }
 
 export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
   return async (config: InlineConfig, options: Options) => {
-    return mergeConfig(config, {
+    config = mergeConfig(config, {
       css: {
         preprocessorOptions: {
           scss: {
@@ -108,10 +104,6 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
             },
           ],
         }),
-        vuetify({
-          autoImport: true,
-          styles: { configFile: path.resolve(__dirname, `./settings.scss`) },
-        }),
       ],
       resolve: {
         alias: [
@@ -137,9 +129,14 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
             find: 'module',
             replacement: path.resolve(__dirname, '../../../../packages/dsfr-connect/node_modules/@gouvfr/dsfr/module'),
           },
-          ...(factoryOptions?.alias ? factoryOptions?.alias : []),
         ],
       },
     });
+
+    if (factoryOptions?.configToMerge) {
+      config = mergeConfig(config, factoryOptions.configToMerge(options));
+    }
+
+    return config;
   };
 }

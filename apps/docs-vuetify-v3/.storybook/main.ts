@@ -1,5 +1,6 @@
 import { StorybookConfig } from '@storybook/vue3-vite';
 import path from 'path';
+import vuetify from 'vite-plugin-vuetify';
 
 import { getConfig, viteFinalFactory } from '@dsfrc/docs/utils/storybook/main';
 import { TargetName } from '@dsfrc/docs/utils/targets';
@@ -21,12 +22,27 @@ const config: StorybookConfig = {
   },
   viteFinal: viteFinalFactory({
     framework: framework,
-    alias: [
-      {
-        find: '@/util',
-        replacement: path.resolve(__dirname, '../stories/framework/util'),
-      },
-    ],
+    configToMerge: (options) => {
+      return {
+        optimizeDeps: {
+          exclude: options.configType !== 'PRODUCTION' ? ['@storybook/addon-styling', 'vuetify'] : [], // Avoid optimizing those librairies since directly imported (otherwise it takes more time and requires sometimes reloading the page)
+        },
+        plugins: [
+          vuetify({
+            autoImport: true,
+            styles: { configFile: path.resolve(__dirname, `./settings.scss`) },
+          }),
+        ],
+        resolve: {
+          alias: [
+            {
+              find: '@/util',
+              replacement: path.resolve(__dirname, '../stories/framework/util'),
+            },
+          ],
+        },
+      };
+    },
   }),
 };
 

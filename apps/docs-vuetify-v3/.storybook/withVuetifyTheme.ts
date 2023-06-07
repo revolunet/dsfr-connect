@@ -25,7 +25,7 @@ export const withVuetifyTheme = <TRenderer extends Renderer = Renderer>({
 
     const selected = themeOverride || selectedTheme || defaultTheme;
 
-    // [WORKAROUND] The template below (both template hardcoded or through `StoryWrapper`)
+    // [WORKAROUND] The template below (through `StoryWrapper`)
     // is not being rerendered whereas this function is called... so we force refreshing the page
     // It may have to do with: https://stackoverflow.com/questions/68724615/vue-storybook-globaltypes-not-re-rendering-preview
     if (previousSelected && selected !== previousSelected) {
@@ -35,27 +35,13 @@ export const withVuetifyTheme = <TRenderer extends Renderer = Renderer>({
 
     previousSelected = selected;
 
-    // Since having no display we do not use a component wrapper
-    // Ref: https://stackoverflow.com/a/68361722/3608410
-    // ---
-    // [Vue warn]: Invalid VNode type: undefined (undefined)
-    // at <Anonymous name="salut" >
-    // at <VMain>
-    // at <VApp theme="light" >
-    // at <StoryWrapper themeName="light" key="light" >
-    // at <App>
-    // ---
-    // return h(
-    //   StoryWrapper as any,
-    //   { themeName: selected, key: selected },
-    //   {
-    //     story: () => h(story, { ...context.args }),
-    //   }
-    // );
-
-    return {
-      components: { story },
-      template: `<v-app theme="${selected}"><story /></v-app>`,
-    };
+    return () =>
+      h(
+        StoryWrapper as any,
+        { themeName: selected, key: selected },
+        {
+          story: () => h((story as any)(), { ...context.args }),
+        }
+      );
   };
 };

@@ -25,7 +25,7 @@ const config: StorybookConfig = {
     configToMerge: (options) => {
       return {
         optimizeDeps: {
-          exclude: options.configType !== 'PRODUCTION' ? ['@storybook/addon-styling', 'vuetify'] : [], // Avoid optimizing those librairies since directly imported (otherwise it takes more time and requires sometimes reloading the page)
+          exclude: options.configType !== 'PRODUCTION' ? ['@storybook/addon-styling', 'vuetify', '@codegouvfr/react-dsfr'] : [], // Avoid optimizing those librairies since directly imported (otherwise it takes more time and requires sometimes reloading the page)
         },
         plugins: [
           vuetify({

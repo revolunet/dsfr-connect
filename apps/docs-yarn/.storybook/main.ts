@@ -1,8 +1,8 @@
 import { StorybookConfig } from '@storybook/vue3-vite';
 import path from 'path';
 
-import { getConfig, viteFinalFactory } from '../utils/storybook/main';
-import { TargetName } from '../utils/targets';
+import { getConfig, viteFinalFactory } from '../../../apps/docs/utils/storybook/main';
+import { TargetName } from '../../../apps/docs/utils/targets';
 
 const framework: any = 'yarn';
 

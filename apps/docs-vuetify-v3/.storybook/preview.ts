@@ -1,8 +1,6 @@
-import '@mdi/font/css/materialdesignicons.css';
 import { setup } from '@storybook/vue3';
 
 import '@dsfrc/dsfr-connect/src/fonts/index.scss';
-import '@dsfrc/dsfr-connect/src/vuetify-v3/index.scss';
 
 import { registerPlugins } from './plugins';
 import { withVuetifyTheme } from './withVuetifyTheme';

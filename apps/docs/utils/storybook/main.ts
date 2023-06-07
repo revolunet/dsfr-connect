@@ -5,6 +5,7 @@ import { InlineConfig, mergeConfig } from 'vite';
 import { normalizePath } from 'vite';
 import pluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import vuetify from 'vite-plugin-vuetify';
 
 export function getConfig(framework?: string): StorybookConfig {
   const stories: string[] = [
@@ -106,6 +107,10 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
               dest: 'assets/fonts', // Must be relative
             },
           ],
+        }),
+        vuetify({
+          autoImport: true,
+          styles: { configFile: path.resolve(__dirname, `./settings.scss`) },
         }),
       ],
       resolve: {

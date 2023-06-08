@@ -97,3 +97,59 @@ export const { MuiDsfrThemeProvider } = createMuiDsfrThemeProvider({
   },
 });
 ```
+
+## storybook-v7
+
+Deux approches sont possibles pour mettre un thème à Storybook.
+
+_(À noter qu'il faut différencier la partie "dashboard" Storybook et le contenu des stories au milieu. Ci-dessous nous modifions le dashboard, par contre si vous souhaitez gérer des thèmes au niveau global de vos stories, c'est encore autre chose bien qu'ils puissent être liés par les mêmes boutons d'actions en cas de "switch dark mode")_
+
+### Forcer un thème spécifique
+
+Dans votre configuration Storybook mettre :
+
+```ts
+// .storybook/manager.ts
+import { darkTheme, lightTheme } from 'dsfr-connect/src/storybook-v7';
+
+export const config: Addon_Config = {
+  theme: darkTheme,
+};
+```
+
+### Utiliser le dark mode
+
+Il n'y a pas de gestion native pour gérer 2 thèmes (bien que la UI Storybook de base sache le faire, ce n'est pas paramétable). Il faut vous pour cela utiliser le plugin [https://github.com/hipstersmoothie/storybook-dark-mode]().
+
+Ensuite dans votre configuration Storybook mettre :
+
+```ts
+// .storybook/preview.ts
+import { darkTheme, lightTheme } from 'dsfr-connect/src/storybook-v7';
+
+export const preview = {
+  parameters: {
+    darkMode: {
+      light: lightTheme,
+      dark: darkTheme,
+    },
+  },
+};
+```
+
+### Surcharger le thème
+
+Il est possible que vous souhaitiez personnaliser le titre, le logo... rien de plus simple ! Vous pouvez surcharger les thèmes de cette façon :
+
+```ts
+import { lightTheme } from 'dsfr-connect/src/storybook-v7';
+
+export const lightTheme = {
+  ...lightTheme,
+  brandTitle: 'Mon propre nom',
+  brandUrl: 'https://example.com',
+  brandImage: '/assets/logo.png', // Placez votre image dans `public/assets/logo.png` et utilisez dans votre configuration du `main.ts` : `staticDirs: ['../public'],`
+};
+```
+
+_N'hésitez pas à aller voir l'interface `ThemeVars` dans `dsfr-connect/src/storybook-v7` afin de comprendre ce qui est personnalisable._

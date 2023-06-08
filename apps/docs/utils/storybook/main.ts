@@ -40,6 +40,7 @@ export function getConfig(framework?: string): StorybookConfig {
       },
     },
     '@storybook/addon-styling',
+    'storybook-dark-mode',
   ];
 
   if (!framework) {

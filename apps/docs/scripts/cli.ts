@@ -49,17 +49,17 @@ program
     switch (action) {
       case 'dev':
         commands = [
-          {
-            target: mainTarget,
-            // With "dev" if launching concurrently the instance referencing others will fail with CORS issue... just adding
-            // delay solves this... which is weird :/ . Maybe the server does a specific call different then a browser visit
-            // and change the CORS configuration. We did avoid sharing the same cache, don't understand know what could be the cause.
-            // Ref: https://github.com/storybookjs/storybook/issues/12108#issuecomment-1564231780
-            command: `sleep 3 && cd ${mainFolderPath} && storybook dev -p ${mainTarget.port} --no-open`,
-            env: {
-              SELECTED_FRAMEWORKS: selectedFrameworks.map((f) => f.name).join(','),
-            },
-          },
+          // {
+          //   target: mainTarget,
+          //   // With "dev" if launching concurrently the instance referencing others will fail with CORS issue... just adding
+          //   // delay solves this... which is weird :/ . Maybe the server does a specific call different then a browser visit
+          //   // and change the CORS configuration. We did avoid sharing the same cache, don't understand know what could be the cause.
+          //   // Ref: https://github.com/storybookjs/storybook/issues/12108#issuecomment-1564231780
+          //   command: `sleep 3 && cd ${mainFolderPath} && storybook dev -p ${mainTarget.port} --no-open`,
+          //   env: {
+          //     SELECTED_FRAMEWORKS: selectedFrameworks.map((f) => f.name).join(','),
+          //   },
+          // },
           ...selectedFrameworks.map((framework) => ({
             target: framework,
             // To avoid cache concurrency we need to run `storybook` in the dedicated folder (no cross-call)
@@ -127,10 +127,10 @@ program
         ]);
         break;
       case 'download':
-        await Promise.all([mainTarget.download(), ...selectedFrameworks.map(async (framework) => framework.download())]);
+        await Promise.all([...selectedFrameworks.map(async (framework) => framework.download())]);
         break;
       case 'extract':
-        await Promise.all([mainTarget.extract(), ...selectedFrameworks.map(async (framework) => framework.extract())]);
+        await Promise.all([...selectedFrameworks.map(async (framework) => framework.extract())]);
         break;
       case 'lint':
         commands = [

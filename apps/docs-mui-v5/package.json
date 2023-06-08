@@ -12,6 +12,7 @@
     "cli": "cd ../../apps/docs && ts-node -r tsconfig-paths/register ./scripts/cli.ts"
   },
   "devDependencies": {
+    "@codegouvfr/react-dsfr": "^0.60.0",
     "@dsfrc/docs": "workspace:docs@*",
     "@dsfrc/dsfr-connect": "workspace:dsfr-connect@*",
     "@emotion/react": "^11.11.1",

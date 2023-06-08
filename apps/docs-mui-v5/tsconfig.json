@@ -1,0 +1,11 @@
+{
+  "extends": "../../apps/docs/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@dsfrc/docs/*": ["../../apps/docs/*"],
+      "@dsfrc/dsfr-connect/*": ["../../packages/dsfr-connect/*"]
+    }
+  },
+  "include": [".storybook/**/*.ts", ".storybook/**/*.tsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

@@ -1,6 +1,6 @@
 import { create } from '@storybook/theming/create';
 
-import { darkColors, lightColors } from '../common';
+import { assetsBaseUrl, darkColors, lightColors } from '@dsfrc/dsfr-connect/src/common';
 
 // Since not exported by Storybook
 export interface ThemeVars {
@@ -40,11 +40,11 @@ const commonVariables: ThemeVars = {
   fontCode: 'monospace',
   brandTitle: `Storybook de l'État`,
   brandUrl: './',
-  brandImage: 'https://storybook.js.org/images/placeholders/350x150.png', // TODO
+  brandImage: `${assetsBaseUrl}logo/marianne.svg`, // TODO
   brandTarget: '_self',
   appBorderRadius: 0,
-  inputBorderRadius: 0,
-  // gridCellSize: xx,
+  inputBorderRadius: 0, // Will be set with CSS
+  // gridCellSize: ?, // Don't know what it targets
 };
 
 lightColors.decisions.text.inverted.grey.default;
@@ -62,20 +62,14 @@ const lightVariables: ThemeVars = {
   textMutedColor: lightColors.decisions.text.label.grey.default, // Used for placeholders for example
   buttonBg: lightColors.decisions.background.actionHigh.blueFrance.default,
   buttonBorder: lightColors.decisions.border.actionHigh.blueFrance.default,
-  booleanBg: 'red',
-  // booleanSelectedBg: '?',
-
-  // Toolbar default and active colors
-  // barTextColor: 'green',
-  // barSelectedColor: 'purple',
-  // barBg: '#ffffff',
-
-  // Form colors
-  // inputBg: '#ffffff',
-  // inputBorder: 'purple',
-  // inputTextColor: 'red',
-
-  // gridCellSize?: number;
+  booleanBg: lightColors.decisions.background.alt.blueFrance.default,
+  booleanSelectedBg: lightColors.decisions.background.alt.blueFrance.active,
+  barTextColor: lightColors.decisions.text.default.grey.default,
+  barSelectedColor: lightColors.decisions.text.active.blueFrance.default,
+  barBg: lightColors.decisions.background.alt.grey.default,
+  inputBg: lightColors.decisions.background.contrast.grey.default,
+  inputBorder: lightColors.decisions.border.plain.grey.default,
+  inputTextColor: lightColors.decisions.text.label.grey.default,
 };
 
 export const lightTheme = create(lightVariables);
@@ -83,47 +77,24 @@ export const lightTheme = create(lightVariables);
 const darkVariables: ThemeVars = {
   ...commonVariables,
   base: 'dark',
-  // // Typography
-  // fontBase: 'Verdana, sans-serif',
-  // fontCode: 'monospace',
-
-  // brandTitle: 'My custom Storybook',
-  // brandUrl: './',
-  // brandImage: 'https://storybook.js.org/images/placeholders/350x150.png',
-  // brandTarget: '_self',
-
-  // //
-  // colorPrimary: '#3A10E5',
-  // colorSecondary: 'red',
-
-  // // UI
-  // appBg: '#ff0000',
-  // appContentBg: '#ff0000',
-  // appBorderColor: '#585C6D',
-  // appBorderRadius: 4,
-
-  // // Text colors
-  // textColor: '#10162F',
-  // textInverseColor: '#ffffff',
-  // // textMutedColor?: string;
-
-  // // buttonBg?: string;
-  // // buttonBorder?: string;
-  // // booleanBg?: string;
-  // // booleanSelectedBg?: string;
-
-  // // Toolbar default and active colors
-  // barTextColor: '#9E9E9E',
-  // barSelectedColor: '#585C6D',
-  // barBg: '#ffffff',
-
-  // // Form colors
-  // inputBg: '#ffffff',
-  // inputBorder: '#10162F',
-  // inputTextColor: '#10162F',
-  // inputBorderRadius: 2,
-
-  // // gridCellSize?: number;
+  colorPrimary: darkColors.options.blueFrance._950_100.default,
+  colorSecondary: darkColors.options.blueFrance.sun113_625.default,
+  appBg: darkColors.options.grey._1000_50.default,
+  appContentBg: darkColors.options.grey._1000_100.default,
+  appBorderColor: darkColors.decisions.border.default.grey.default,
+  textColor: darkColors.decisions.text.default.grey.default,
+  textInverseColor: darkColors.decisions.text.inverted.grey.default,
+  textMutedColor: darkColors.decisions.text.label.grey.default, // Used for placeholders for example
+  buttonBg: darkColors.decisions.background.actionHigh.blueFrance.default,
+  buttonBorder: darkColors.decisions.border.actionHigh.blueFrance.default,
+  booleanBg: darkColors.decisions.background.alt.blueFrance.default,
+  booleanSelectedBg: darkColors.decisions.background.alt.blueFrance.active,
+  barTextColor: darkColors.decisions.text.default.grey.default,
+  barSelectedColor: darkColors.decisions.text.active.blueFrance.default,
+  barBg: darkColors.decisions.background.alt.grey.default,
+  inputBg: darkColors.decisions.background.contrast.grey.default,
+  inputBorder: darkColors.decisions.border.plain.grey.default,
+  inputTextColor: darkColors.decisions.text.label.grey.default,
 };
 
 export const darkTheme = create(darkVariables);

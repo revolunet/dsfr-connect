@@ -1,5 +1,6 @@
-// Empty default value if not specified
-$fontBaseUrl: if(global-variable-exists('fontBaseUrl'), $fontBaseUrl, '');
+@forward '../common/assets.scss';
+
+$fontBaseUrl: if(global-variable-exists('fontBaseUrl'), $fontBaseUrl, $assetsBaseUrl);
 
 @font-face {
   font-family: Marianne;

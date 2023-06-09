@@ -6,6 +6,16 @@ import { normalizePath } from 'vite';
 import pluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+// Environment variables needs to be provided at 2 places for internal packages using `process.env`
+// Ref: https://github.com/storybookjs/storybook/issues/18920
+function getEnvironmentVariables(environment: 'development' | 'production'): Record<string, string> {
+  const isProduction = environment === 'production';
+
+  return {
+    DSFR_CONNECT_ASSETS_BASE_URL: isProduction ? './' : '/assets/',
+  };
+}
+
 export function getConfig(framework?: string): StorybookConfig {
   const stories: string[] = [
     // Lookup wildcards should not meet a `node_modules` because due to `pnpm` symlinks everything break
@@ -64,6 +74,11 @@ export function getConfig(framework?: string): StorybookConfig {
       enableCrashReports: false,
       disableTelemetry: true,
     },
+    env: (config) => ({
+      ...config,
+      // Weird... this function is never called (we are fine with just `viteFinal` hack for now)
+      // ...getEnvironmentVariables(config.xxxx),
+    }),
   };
 }
 
@@ -75,19 +90,18 @@ export interface ViteFinalFactoryOptions {
 export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
   return async (config: InlineConfig, options: Options) => {
     config = mergeConfig(config, {
+      define: {
+        'process.env': getEnvironmentVariables(options.configType === 'PRODUCTION' ? 'production' : 'development'),
+      },
       css: {
         preprocessorOptions: {
           scss: {
             additionalData: (content: string) => {
               // Only add the variables to the font file for now
-              // Setting it on all would break those using `@use` since no definition must be done before
-              let preprendContent = '';
-              if (content.includes('$fontBaseUrl: ')) {
-                preprendContent = `@import "${path.resolve(
-                  __dirname,
-                  `../../../../apps/docs/utils/storybook/variables.${options.configType === 'PRODUCTION' ? 'prod' : 'dev'}.scss`
-                )}";`;
-              }
+              let preprendContent = `@use "${path.resolve(
+                __dirname,
+                `../../../../apps/docs/utils/storybook/variables.${options.configType === 'PRODUCTION' ? 'prod' : 'dev'}.scss`
+              )}" as *;`;
 
               return `${preprendContent}\n${content}`;
             },
@@ -100,8 +114,12 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
           // Directly served in "development" but copied during the "production" build
           targets: [
             {
+              src: `${normalizePath(path.dirname(require.resolve('@dsfrc/dsfr-connect/src/assets/.gitkeep')))}/*`,
+              dest: 'assets',
+            },
+            {
               src: `${normalizePath(path.dirname(require.resolve('@gouvfr/dsfr/dist/fonts/Marianne-Bold.woff2')))}/*`,
-              dest: 'assets/fonts', // Must be relative
+              dest: 'assets/fonts',
             },
           ],
         }),

@@ -6,6 +6,8 @@ import { normalizePath } from 'vite';
 import pluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+import { manageHeadFactory } from '@dsfrc/dsfr-connect/src/storybook-v7/theme';
+
 // Environment variables needs to be provided at 2 places for internal packages using `process.env`
 // Ref: https://github.com/storybookjs/storybook/issues/18920
 function getEnvironmentVariables(environment: 'development' | 'production'): Record<string, string> {
@@ -67,6 +69,7 @@ export function getConfig(framework?: string): StorybookConfig {
   }
 
   return {
+    managerHead: manageHeadFactory('/assets/storybook/theme.css'),
     stories: stories,
     staticDirs: ['../public'],
     addons: addons,

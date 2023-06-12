@@ -597,6 +597,9 @@ importers:
       '@mui/x-date-pickers':
         specifier: ^6.6.0
         version: 6.6.0(@mui/base@5.0.0-beta.4)(@mui/material@5.13.4)(@mui/system@5.13.2)(react-dom@18.2.0)(react@18.2.0)
+      '@storybook/blocks':
+        specifier: 7.0.17
+        version: 7.0.17(react-dom@18.2.0)(react@18.2.0)
       '@storybook/theming':
         specifier: 7.0.17
         version: 7.0.17(react-dom@18.2.0)(react@18.2.0)
@@ -654,6 +657,12 @@ importers:
       jest-resolver-tsconfig-paths:
         specifier: ^0.14.4
         version: 0.14.4
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
       sass:
         specifier: ^1.62.1
         version: 1.62.1

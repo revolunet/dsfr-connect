@@ -2,6 +2,8 @@ import { create } from '@storybook/theming/create';
 
 import { assetsBaseUrl, darkColors, lightColors } from '@dsfrc/dsfr-connect/src/common';
 
+export { DocsContainer } from '@dsfrc/dsfr-connect/src/storybook-v7/DocsContainer';
+
 // Since not exported by Storybook
 export interface ThemeVars {
   base: 'light' | 'dark';

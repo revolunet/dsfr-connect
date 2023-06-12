@@ -100,24 +100,24 @@ export const { MuiDsfrThemeProvider } = createMuiDsfrThemeProvider({
 
 ## storybook-v7
 
-Deux approches sont possibles pour mettre un thème à Storybook.
+**À noter qu'il faut différencier la partie "dashboard" Storybook et le contenu des stories.**
 
-_(À noter qu'il faut différencier la partie "dashboard" Storybook et le contenu des stories au milieu. Ci-dessous nous modifions le dashboard, par contre si vous souhaitez gérer des thèmes au niveau global de vos stories, c'est encore autre chose bien qu'ils puissent être liés par les mêmes boutons d'actions en cas de "switch dark mode")_
+### Modifier le thème de l'outil
 
-### Forcer un thème spécifique
+#### Forcer un thème spécifique
 
 Dans votre configuration Storybook mettre :
 
 ```ts
 // .storybook/manager.ts
-import { darkTheme, lightTheme } from 'dsfr-connect/src/storybook-v7';
+import { darkTheme, lightTheme } from 'dsfr-connect/dist/storybook-v7';
 
 export const config: Addon_Config = {
   theme: darkTheme,
 };
 ```
 
-### Utiliser le dark mode
+#### Utiliser le dark mode
 
 Il n'y a pas de gestion native pour gérer 2 thèmes (bien que la UI Storybook de base sache le faire, ce n'est pas paramétable). Il faut vous pour cela utiliser le plugin [https://github.com/hipstersmoothie/storybook-dark-mode]().
 
@@ -125,7 +125,7 @@ Ensuite dans votre configuration Storybook mettre :
 
 ```ts
 // .storybook/preview.ts
-import { darkTheme, lightTheme } from 'dsfr-connect/src/storybook-v7';
+import { darkTheme, lightTheme } from 'dsfr-connect/dist/storybook-v7';
 
 export const preview = {
   parameters: {
@@ -137,12 +137,12 @@ export const preview = {
 };
 ```
 
-### Surcharger le thème
+#### Surcharger le thème
 
 Il est possible que vous souhaitiez personnaliser le titre, le logo... rien de plus simple ! Vous pouvez surcharger les thèmes de cette façon :
 
 ```ts
-import { lightTheme } from 'dsfr-connect/src/storybook-v7';
+import { lightTheme } from 'dsfr-connect/dist/storybook-v7';
 
 export const lightTheme = {
   ...lightTheme,
@@ -153,3 +153,32 @@ export const lightTheme = {
 ```
 
 _N'hésitez pas à aller voir l'interface `ThemeVars` dans `dsfr-connect/src/storybook-v7` afin de comprendre ce qui est personnalisable._
+
+### Utiliser le DSFR dans les stories
+
+```ts
+// .storybook/preview.ts
+import '@gouvfr/dsfr/dist/dsfr/dsfr.css';
+import '@gouvfr/dsfr/dist/utility/utility.css';
+import 'dsfr-connect/dist/fonts/index.css';
+```
+
+Cette exemple est pour le DSFR "brut", c'est à dire qu'on ne décrit pas les initialisations propres à l'implémentation DSFR que vous pourriez utiliser (`react-dsfr`, `vue-dsfr`...). Aussi, il ne prend pas en compte la gestion du dark mode car celui-ci doit être géré par des plugins Storybook tiers (libre à vous de vous inspirer du code de ce Storybook).
+
+### Utiliser le DSFR dans les fichiers de documentation
+
+Si écrivez `.mdx` dans Storybook v7 vous avez probablement remarqué que le style par défaut de Storybook est en conflit avec celui du DSFR. La solution que nous avons trouvé est de les mettre dans un composant `<Unstyled>`. Bien que cela ne règle pas des conflits sur certains liens en markdown, cela vous aidera grandement.
+
+```ts
+// .storybook/preview.ts
+import { DocsContainer } from 'dsfr-connect/dist/storybook-v7';
+
+export default {
+  ...
+  parameters: {
+    docs: {
+      container: DocsContainer,
+    },
+  },
+};
+```

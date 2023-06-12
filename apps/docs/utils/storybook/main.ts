@@ -69,7 +69,7 @@ export function getConfig(framework?: string): StorybookConfig {
   }
 
   return {
-    managerHead: manageHeadFactory('/assets/storybook/theme.css'),
+    managerHead: manageHeadFactory('/assets/storybook/index.css'),
     stories: stories,
     staticDirs: ['../public'],
     addons: addons,
@@ -91,6 +91,15 @@ export interface ViteFinalFactoryOptions {
 }
 
 export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
+  let storybookThemePath: string;
+  try {
+    storybookThemePath = require.resolve('../../../../packages/dsfr-connect/dist/storybook-v7/index.css');
+  } catch (error) {
+    console.error(`the dsfr-connect package style must be built locally to start the storybook instance: ${error}`);
+
+    throw error;
+  }
+
   return async (config: InlineConfig, options: Options) => {
     config = mergeConfig(config, {
       define: {
@@ -123,6 +132,10 @@ export function viteFinalFactory(factoryOptions?: ViteFinalFactoryOptions) {
             {
               src: `${normalizePath(path.dirname(require.resolve('@gouvfr/dsfr/dist/fonts/Marianne-Bold.woff2')))}/*`,
               dest: 'assets/fonts',
+            },
+            {
+              src: normalizePath(storybookThemePath),
+              dest: 'assets/storybook',
             },
           ],
         }),

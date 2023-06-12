@@ -7,7 +7,7 @@ export function manageHeadFactory(path?: string) {
     // We cannot rely on `assetsBaseUrl` since environment is not yet set up, we are a the
     // initialization of Storybook so we need to manage hardcoded values here too
     return `${head}
-      <link rel="stylesheet" href="${path || `${assetsBaseUrl}storybook/theme.css`}">
+      <link rel="stylesheet" href="${path || `${assetsBaseUrl}storybook/index.css`}">
     `;
   };
 }

@@ -1,6 +1,6 @@
-@forward '../common/assets.scss';
+@import '../common/assets.scss';
 
-$fontBaseUrl: if(global-variable-exists('fontBaseUrl'), $fontBaseUrl, $assetsBaseUrl);
+$fontBaseUrl: if(global-variable-exists('fontBaseUrl'), $fontBaseUrl, '#{$assetsBaseUrl}fonts/');
 
 @font-face {
   font-family: Marianne;
